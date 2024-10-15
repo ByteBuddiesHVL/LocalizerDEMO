@@ -1,0 +1,232 @@
+:root {
+  height: 100%;
+}
+
+body {
+	margin: 0;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+		"Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	--search-icon: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="red" stroke-width="5" fill="none" stroke-linecap="round"><circle cx="28" cy="28" r="24"/><path d="m46 46l14 14"/></svg>');
+	--goto-icon: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19.33 10.18a1 1 0 0 1-.77 0 1 1 0 0 1-.62-.93l.01-1.83-8.2 8.2a1 1 0 0 1-1.41-1.42l8.2-8.2H14.7a1 1 0 0 1 0-2h4.25a1 1 0 0 1 1 1v4.25a1 1 0 0 1-.62.93Z"/><path d="M11 4a1 1 0 1 1 0 2H7a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-4a1 1 0 1 1 2 0v4a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h4Z"/></svg>');
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button {
+	background: 0 0;
+	border: none;
+	color: inherit;
+	cursor: pointer;
+	display: inline-block;
+	font: inherit;
+	margin: 0;
+	padding: 0;
+	text-align: inherit;
+}
+
+nav {
+	background: hsl(224, 19%, 97%);
+	padding: 0.5em;
+	display: flex;
+	justify-content: center;
+	border-bottom: 1px solid hsl(224, 20%, 94%);
+}
+
+.search-bar {
+	background: #fff;
+	border: 1px solid hsl(224, 6%, 77%);
+	padding: 0.5em 0.75em;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	max-width: 20em;
+  flex-grow: 1;
+	border-radius: 0.4em;
+}
+
+.search-bar::after {
+	content: "";
+	width: 1em;
+	height: 1em;
+	-webkit-mask: no-repeat var(--search-icon);
+	mask: no-repeat var(--search-icon);
+	background: #000;
+}
+
+.search {
+	inset: 0;
+	margin: 0;
+	width: auto;
+	height: auto;
+	border: 0;
+	padding: 1em;
+	background: hsl(224, 19%, 97%);
+	overflow: auto;
+	gap: 1em;
+	align-content: start;
+}
+
+.search[open] {
+	display: grid;
+}
+
+.search > * {
+	max-width: 40em;
+	margin: auto;
+}
+
+[role="search"] {
+	position: relative;
+	display: flex;
+	align-items: center;
+	width: 100%;
+}
+
+[role="search"]::after {
+	content: "";
+	width: 1em;
+	height: 1em;
+	-webkit-mask: no-repeat var(--search-icon);
+	mask: no-repeat var(--search-icon);
+	background: #000;
+	position: absolute;
+	right: calc(1px + 0.75em);
+}
+
+[role="search"] input {
+	font: inherit;
+	padding: 0.5em 2.25em 0.5em 0.75em;
+	border: 1px solid hsl(224, 6%, 77%);
+	border-radius: 0.4em;
+	width: 100%;
+}
+
+.product-list {
+	display: grid;
+	list-style-type: none;
+	gap: 0.5em;
+	padding: 0;
+	width: 100%;
+}
+
+.product {
+	background: #fff;
+	width: 100%;
+	display: grid;
+	grid-template-columns: 2em 1fr 1.25em;
+	gap: 0.5em;
+	padding: 0.2em 1em 0.2em 0.5em;
+	height: 2.4em;
+	align-items: center;
+	border-radius: 0.3em;
+}
+
+.product img {
+	max-width: 2em;
+	max-height: 2em;
+}
+
+.product div {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.product::after {
+	content: "";
+	width: 1.25em;
+	height: 1.25em;
+	-webkit-mask: no-repeat var(--goto-icon);
+	mask: no-repeat var(--goto-icon);
+	background: #000;
+}
+
+.back-btn {
+	position: absolute;
+	/* font-size: 1.5em; */
+	right: 1em;
+	bottom: 1em;
+}
+
+main {
+	display: flex;
+  height: 100%;
+  overflow: hidden;
+  background: hsl(224, 12%, 84%);
+}
+
+.map-wrapper {
+  height: 100%;
+  width: 100%;
+  padding: 1em;
+  overflow: hidden;
+  background: hsl(224, 19%, 97%);
+}
+
+main svg {
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  border-radius: 0.3em;
+}
+
+.has-product > .col {
+  flex: 1 50%;
+}
+
+.has-product #dragger {
+  flex: 0 0 7px;
+  touch-action: none;
+	-webkit-user-select: none;
+	user-select: none;
+  margin: 0 -3px;
+  cursor: ew-resize;
+}
+
+.product-view {
+  overflow-y: auto;
+  background: hsl(224, 19%, 97%);
+  padding: 1em;
+}
+
+.product-view > * {
+  max-width: 50em;
+  margin: auto;
+}
+
+.img-wrapper {
+  max-width: 40em;
+  max-height: 40em;
+  aspect-ratio: 1 / 1;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.3em;
+}
+
+.img-wrapper img {
+  max-height: 100%;
+  max-width: 100%;
+}
+
+@media (max-aspect-ratio: 1/1) {
+  .has-product {
+    flex-direction: column;
+  }
+  .has-product #dragger {
+    margin: -3px 0;
+    cursor: ns-resize;
+  }
+}
