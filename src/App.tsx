@@ -1,5 +1,6 @@
-import { createMemo, createSignal, For, Show, type Component } from "solid-js"
+import { createMemo, createSignal, For, Show, Signal, type Component } from "solid-js"
 import { Product, products } from "./products"
+import { formatPrice } from "./utils"
 
 let allowDragging: boolean
 const letter = /\p{L}/u
@@ -16,6 +17,7 @@ const updateWidth = (pos: number) => {
 const App: Component = () => {
 	const [term, setTerm] = createSignal("")
 	const [selected, setSelected] = createSignal<Product | undefined>()
+	const [cart, setCart] = createSignal<[Product, Signal<string>][]>([])
 	const filteredProducts = createMemo(() => {
 		const query = term().toLowerCase()
 		const len = query.length
@@ -62,30 +64,65 @@ const App: Component = () => {
 			<Show when={filteredProducts()?.length === 0}>
 				<p>Fant ingen produkter.</p>
 			</Show>
-      <Show when={filteredProducts()?.[0]}>
-        <ul class="product-list">
-          <For each={filteredProducts()}>{
-            (prod) => <li>
-              <button class="product" aria-label="Gå til produkt" onClick={() => {
+			<Show when={filteredProducts()?.[0]}>
+				<ul class="product-list">
+					<For each={filteredProducts()}>{
+						(prod) => <li>
+							<button class="product" aria-label="Gå til produkt" onClick={() => {
 								setSelected(prod)
 								dialog.close()
 							}}>
-                <img src={`/products/${prod.image}.webp`} />
-                <div>{prod.name}</div>
-              </button>
-            </li>  
-          }</For>
-        </ul>
-      </Show>
-      <button class="back-btn" onClick={() => {
-        dialog.close()
-      }}>Tilbake</button>
+								<img src={`/products/${prod.image}.webp`} />
+								<div>{prod.name}</div>
+							</button>
+						</li>  
+					}</For>
+				</ul>
+			</Show>
+			<button class="back-btn" onClick={() => {
+				dialog.close()
+			}}>Tilbake</button>
+		</dialog>
+	) as HTMLDialogElement
+
+	const cartDialog = (
+		<dialog class="cart">
+				<Show when={cart()[0]} fallback={<span>Handlelisten er tom.</span>}>
+					<ul class="cart-list">
+						<For each={cart()}>{
+							([prod, [count, setCount]]) => (
+								<li>
+									<img src={`/products/${prod.image}.webp`} />
+									<div>
+										<div>{prod.name}</div>
+										<label aria-label="Antall">
+											<button onClick={() => {
+												setCount(`${+count() - 1}`)
+											}}>-</button>
+											<input type="number" value={count()} onInput={e => {
+												setCount(e.target.value)
+											}} />
+											<button onClick={() => {
+												setCount(`${+count() + 1}`)
+											}}>+</button>
+										</label>
+									</div>
+									<div>{formatPrice(prod.price * +count())}</div>
+								</li>
+							)
+						}</For>
+					</ul>
+				</Show>
+			<button class="back-btn" onClick={() => {
+				cartDialog.close()
+			}}>Tilbake</button>
 		</dialog>
 	) as HTMLDialogElement
 
 	return (
 		<>
 			<nav>
+				<div class="logo" aria-label="Localizer"></div>
 				<button
 					class="search-bar"
 					onClick={() => {
@@ -94,7 +131,15 @@ const App: Component = () => {
 				>
 					Søk
 				</button>
+				<button
+					class="cart-btn"
+					aria-label="Vis handlekurv"
+					data-count={cart().length || null}
+					onClick={() => {
+					cartDialog.show()
+				}} />
 				{dialog}
+				{cartDialog}
 			</nav>
 			<main class={selected() && "has-product"}>
 				<div class="col map-wrapper">
@@ -108,16 +153,27 @@ const App: Component = () => {
 				<Show when={selected()}>
 					<section class="col product-view">
 						<div class="product-wrapper">
-							<div class="img-wrapper">
-								<img src={`/products/${selected()!.image}.webp`} />
-							</div>
+							<img src={`/products/${selected()!.image}.webp`} />
 							<h2>{selected()!.name}</h2>
 							<p>{selected()!.description}</p>
-							<p>{selected()!.price}</p>
+							<p>{formatPrice(selected()!.price)}</p>
+							<div>
+								<button onClick={() => {
+									const item = cart().find(item => item[0] == selected())
+									if (item) {
+										item[1][1](count => `${+count + 1}`)
+									}
+									else {
+										const newCart = cart().slice()
+										newCart.push([selected()!, createSignal("1")])
+										setCart(newCart)
+									}
+								}}>Legg til handlekurv</button>
+								<button>Fant ikke produktet</button>
+							</div>
 						</div>
 					</section>
 				</Show>
-				{/* <dialog class="product"></dialog> */}
 			</main>
 		</>
 	)
