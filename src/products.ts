@@ -4,6 +4,8 @@ export type Product = {
 	price: number
 	availability: string | null
 	image: string
+	x: number
+	y: number
 }
 
 export const products: Product[] = [
@@ -14,6 +16,8 @@ export const products: Product[] = [
 		price: 1595,
 		availability: "6-20",
 		image: "dewalt",
+		x: 50,
+		y: 15,
 	},
 	{
 		name: "Makita DTW700Z LXT® 18V muttertrekker",
@@ -22,6 +26,8 @@ export const products: Product[] = [
 		price: 3495,
 		availability: "6-20",
 		image: "makita",
+		x: 250,
+		y: 160,
 	},
 	{
 		name: "Roybi ONE+ R16GN18-0 dykkertpistol u/batteri",
@@ -30,5 +36,7 @@ export const products: Product[] = [
 		price: 3195,
 		availability: null,
 		image: "roybi",
+		x: 220,
+		y: 75,
 	},
 ]
