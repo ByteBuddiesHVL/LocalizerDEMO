@@ -1,5 +1,5 @@
 :root {
-  height: 100%;
+	height: 100%;
 }
 
 body {
@@ -10,17 +10,17 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 	--search-icon: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="red" stroke-width="5" fill="none" stroke-linecap="round"><circle cx="28" cy="28" r="24"/><path d="m46 46l14 14"/></svg>');
 	--goto-icon: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19.33 10.18a1 1 0 0 1-.77 0 1 1 0 0 1-.62-.93l.01-1.83-8.2 8.2a1 1 0 0 1-1.41-1.42l8.2-8.2H14.7a1 1 0 0 1 0-2h4.25a1 1 0 0 1 1 1v4.25a1 1 0 0 1-.62.93Z"/><path d="M11 4a1 1 0 1 1 0 2H7a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-4a1 1 0 1 1 2 0v4a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h4Z"/></svg>');
-  height: 100%;
+	height: 100%;
 }
 
 #root {
-  height: 100%;
-  display: grid;
-  grid-template-rows: auto 1fr;
+	height: 100%;
+	display: grid;
+	grid-template-rows: auto 1fr;
 }
 
 * {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 button {
@@ -39,21 +39,21 @@ nav {
 	background: hsl(21, 19%, 97%);
 	padding: 0.5em 1em;
 	display: grid;
-	grid-template-columns: auto minmax(auto, 20em) auto;
+	grid-template-columns: 2.4em minmax(auto, 20em) 2.4em;
 	gap: 1em;
 	justify-content: space-between;
+	align-items: center;
 	border-bottom: 1px solid hsl(21, 20%, 90%);
 }
 
 .logo {
-	aspect-ratio: 1 / 1;
-	height: 100%;
+	height: 2.4em;
 }
 
 .cart-btn {
-	aspect-ratio: 1 / 1;
-	height: 100%;
-	background: no-repeat url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="%23666"><path d="M280-80q-33 0-56.5-23.5T200-160t23.5-56.5T280-240t56.5 23.5T360-160t-23.5 56.5T280-80m400 0q-33 0-56.5-23.5T600-160t23.5-56.5T680-240t56.5 23.5T760-160t-23.5 56.5T680-80M246-720l96 200h280l110-200zm-38-80h590q23 0 35 20.5t1 41.5L692-482q-11 20-29.5 31T622-440H324l-44 80h480v80H280q-45 0-68-39.5t-2-78.5l54-98-144-304H40v-80h130zm134 280h280z"/></svg>');
+	height: 2.4em;
+	background: no-repeat
+		url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="%23666"><path d="M280-80q-33 0-56.5-23.5T200-160t23.5-56.5T280-240t56.5 23.5T360-160t-23.5 56.5T280-80m400 0q-33 0-56.5-23.5T600-160t23.5-56.5T680-240t56.5 23.5T760-160t-23.5 56.5T680-80M246-720l96 200h280l110-200zm-38-80h590q23 0 35 20.5t1 41.5L692-482q-11 20-29.5 31T622-440H324l-44 80h480v80H280q-45 0-68-39.5t-2-78.5l54-98-144-304H40v-80h130zm134 280h280z"/></svg>');
 	position: relative;
 }
 
@@ -187,37 +187,35 @@ nav {
 
 .back-btn {
 	position: absolute;
-	/* font-size: 1.5em; */
 	right: 1em;
 	bottom: 1em;
 }
 
 main {
 	display: grid;
-  height: 100%;
-  overflow: hidden;
-	grid-template-rows: 1fr auto;
+	height: 100%;
+	overflow: hidden;
+	grid-template-rows: 1fr min-content;
 	background: hsl(21, 15%, 95%);
 }
 
 .map-wrapper {
-  height: 100%;
-  width: 100%;
-  padding: 1em;
-  overflow: hidden;
+	height: 100%;
+	width: 100%;
+	padding: 1em;
+	overflow: hidden;
 }
 
 main svg {
-  width: 100%;
-  height: 100%;
-  background: #fff;
-  border-radius: 0.3em;
+	width: 100%;
+	height: 100%;
+	background: #fff;
+	border-radius: 0.3em;
 }
 
 .product-view {
-  background: #fff;
-  padding: 1em;
-	height: min-content;
+	background: #fff;
+	padding: 1em;
 	border-radius: 0.5em 0.5em 0 0;
 }
 
@@ -333,7 +331,7 @@ main svg {
 }
 
 .cart-list input {
-	appearance: text;
+	appearance: textfield;
 	padding: 0;
 	border: 0;
 	width: 2ch;

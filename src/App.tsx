@@ -1,8 +1,6 @@
 import { createMemo, createSignal, For, Show, Signal, type Component } from "solid-js"
-import { Product, products } from "./products"
-import { formatPrice, getRoute } from "./utils"
-
-const letter = /\p{L}/u
+import { Product } from "./products"
+import { filterProducts, formatPrice, getRoute } from "./utils"
 
 const App: Component = () => {
 	const [term, setTerm] = createSignal("")
@@ -10,35 +8,7 @@ const App: Component = () => {
 	const [cart, setCart] = createSignal<[Product, Signal<string>][]>([])
 	const inCart = createMemo(() => cart().some(p => p[0] == selected()))
 	const filteredProducts = createMemo(() => {
-		const query = term().toLowerCase()
-		const len = query.length
-		const result: [number, Product][] = []
-		if (!len) return null
-
-		products.forEach(prod => {
-			let name = prod.name.toLowerCase()
-
-			if (len == 1) {
-				if (name[0] == query) result.push([0, prod])
-			} else {
-				let desc = prod.description.toLowerCase()
-				let score = 0
-				let index = name.indexOf(query)
-				let scale = index + 1 ? 1 : 5
-				if (index < 0) index = desc.indexOf(query)
-				if (index + 1) {
-					score -= index
-					if (index) {
-						score -= 10 * scale
-						if (letter.test(name[index - 1])) score -= 50 * scale
-					}
-					if (letter.test(name[index + len] || "")) score -= 50 * scale
-					result.push([score, prod])
-				}
-			}
-		})
-
-		return result.sort((a, b) => b[0] - a[0]).map(p => p[1])
+		return filterProducts(term().toLowerCase())
 	})
 
 	const dialog = (
@@ -63,7 +33,7 @@ const App: Component = () => {
 								setSelected(prod)
 								dialog.close()
 							}}>
-								<img src={`/products/${prod.image}.webp`} />
+								<img src={`/products/${prod.image}.webp`} alt={prod.name} />
 								<div>{prod.name}</div>
 							</button>
 						</li>  
@@ -83,7 +53,7 @@ const App: Component = () => {
 					<For each={cart()}>{
 						([prod, [count, setCount]]) => (
 							<li>
-								<img src={`/products/${prod.image}.webp`} />
+								<img src={`/products/${prod.image}.webp`} alt={prod.name} />
 								<div>
 									<div>{prod.name}</div>
 									<label aria-label="Antall">
@@ -113,8 +83,8 @@ const App: Component = () => {
 	return (
 		<>
 			<nav>
-				<div class="logo" aria-label="Localizer">
-					<svg viewBox="0 0 24 24" aria-hidden="true">
+				<div class="logo">
+					<svg viewBox="0 0 24 24" aria-label="Localizer">
 						<path id="logo" fill="#e86b2b" d="M21.38 5.71c.1-.1.27-.08.35.04 1.14 1.79 1.81 3.93 1.81 6.22 0 6.39-5.18 11.57-11.57 11.57C5.65 23.54.51 18.47.41 12.17.3 5.71 5.55.39 12 .41c2.74 0 5.25.96 7.23 2.56.11.09.12.24.02.34L17.72 4.84c-.08.08-.21.09-.3.02-1.93-1.49-4.5-2.2-7.23-1.68C6.75 3.84 4 6.48 3.24 9.9 1.92 15.79 6.41 21 12.09 20.93c4.94-.06 8.92-4.16 8.84-9.1-.03-1.55-.45-3.01-1.17-4.28-.05-.09-.03-.2.04-.27l1.57-1.57ZM17.6 9.48c.11-.11.31-.07.37.08.3.74.46 1.56.46 2.41 0 3.54-2.9 6.43-6.43 6.43-3.61 0-6.53-2.96-6.45-6.58.07-3.44 2.87-6.23 6.31-6.3 1.37-.02 2.65.38 3.71 1.09.12.08.14.25.04.35L14.05 8.52c-.07.07-.18.09-.27.04-.54-.28-1.15-.44-1.8-.44-2.4 0-4.29 2.19-3.77 4.68.31 1.47 1.47 2.63 2.94 2.94 2.49.52 4.68-1.37 4.68-3.77 0-.19-.01-.37-.04-.55-.01-.07.01-.14.06-.19L17.58 9.5Z"/>
 					</svg>
 				</div>
@@ -162,7 +132,7 @@ const App: Component = () => {
 				<Show when={selected()}>
 					<section class="product-view">
 						<div class="product-wrapper">
-							<img src={`/products/${selected()!.image}.webp`} />
+							<img src={`/products/${selected()!.image}.webp`} alt={selected()!.name}  />
 							<h2>{selected()!.name}</h2>
 							<p>{selected()!.description}</p>
 							<div class="avail">
@@ -174,10 +144,11 @@ const App: Component = () => {
 							<div>
 								<button onClick={() => {
 									const newCart = cart().slice()
+									const product = selected()!
 									if (inCart()) {
-										newCart.splice(newCart.findIndex(p => p[0] == selected()), 1)
+										newCart.splice(newCart.findIndex(p => p[0] == product), 1)
 									} else {
-										newCart.push([selected()!, createSignal("1")])
+										newCart.push([product, createSignal("1")])
 									}
 									setCart(newCart)
 								}}>{inCart() ? "Fjern fra handleliste" : "Legg i handleliste"}</button>

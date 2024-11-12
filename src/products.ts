@@ -30,12 +30,12 @@ export const products: Product[] = [
 		y: 160,
 	},
 	{
-		name: "Roybi ONE+ R16GN18-0 dykkertpistol u/batteri",
+		name: "Ryobi ONE+ R16GN18-0 dykkertpistol u/batteri",
 		description:
 			"Dykkertpistol 18V ONE+.16G Dykkertpistol med kraftig AirStrike Teknologi som eliminerer behovet for støyende kompressorer, lange slanger eller dyre gasspatroner. Avfyrer dykkert mellom 19-65 mm i lengde og 1,6 mm i bredde. Opptil 60 dykkert pr. minutt og 1000 pr. 5,0Ah opplading.",
 		price: 3195,
 		availability: null,
-		image: "roybi",
+		image: "ryobi",
 		x: 220,
 		y: 75,
 	},
